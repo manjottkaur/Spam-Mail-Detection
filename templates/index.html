@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Spam Mail Detection</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>📧 Spam Mail Detection</h1>
+
+        <p class="subtitle">
+            Detect whether multiple Emails or SMS messages are Spam or Ham.
+        </p>
+
+        <div class="input-box">
+
+            <label>How many emails do you want to check?</label>
+
+            <div class="count-box">
+
+                <input
+                    type="number"
+                    id="count"
+                    min="1"
+                    max="10"
+                    value="1">
+
+                <button type="button" onclick="createInputs()">
+                    Create
+                </button>
+
+            </div>
+
+        </div>
+
+        <form action="/predict" method="POST">
+
+            <div id="emailContainer"></div>
+
+            <button class="predict-btn" type="submit">
+                Analyze Emails
+            </button>
+
+        </form>
+
+        {% if results %}
+
+        <div class="results">
+
+            <h2>Prediction Results</h2>
+
+            {% for item in results %}
+
+            <div class="result-card">
+
+                <h3>Email {{ loop.index }}</h3>
+
+                <p>{{ item.message }}</p>
+
+                <h2>{{ item.prediction }}</h2>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+
+window.onload=createInputs;
+
+function createInputs(){
+
+let n=document.getElementById("count").value;
+
+let container=document.getElementById("emailContainer");
+
+container.innerHTML="";
+
+for(let i=1;i<=n;i++){
+
+container.innerHTML+=`
+
+<label>Email ${i}</label>
+
+<textarea
+name="message"
+placeholder="Paste Email ${i} here..."
+required></textarea>
+
+`;
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
